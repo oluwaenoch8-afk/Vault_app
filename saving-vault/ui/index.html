@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Saving Vault – Voice Passcode Media Vault</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header class="sv-header">
+      <h1>Saving Vault</h1>
+      <p>Store references to your images, videos, and files using a voice-based passcode instead of traditional passwords.</p>
+    </header>
+
+    <main class="sv-main">
+      <section class="sv-card" id="connection-card">
+        <h2>1. Wallet Connection (mock)</h2>
+        <p>
+          In a real deployment, this section would use Stacks Connect to link your browser wallet.
+          For development with Clarinet, we simply type a Stacks address.
+        </p>
+        <form id="wallet-form">
+          <label>
+            Active Stacks address
+            <input type="text" id="wallet-address" placeholder="ST..." required />
+          </label>
+          <button type="submit">Set active address</button>
+        </form>
+        <p id="wallet-status" class="sv-status"></p>
+      </section>
+
+      <section class="sv-card" id="voice-card">
+        <h2>2. Register / Update Voice Passcode</h2>
+        <p>
+          Imagine this as a voice capture step. For now, type a phrase that represents your voice passcode.
+          The UI will hash it locally with SHA-256 and display the resulting 32-byte value.
+        </p>
+        <form id="voice-register-form">
+          <label>
+            Voice phrase
+            <input type="text" id="voice-phrase" placeholder="say: my vault is my voice" required />
+          </label>
+          <button type="submit">Register voice</button>
+        </form>
+
+        <form id="voice-update-form">
+          <h3>Update existing voice</h3>
+          <label>
+            Old voice phrase
+            <input type="text" id="old-voice-phrase" required />
+          </label>
+          <label>
+            New voice phrase
+            <input type="text" id="new-voice-phrase" required />
+          </label>
+          <button type="submit">Update voice</button>
+        </form>
+
+        <pre id="voice-hash-preview" class="sv-code"></pre>
+      </section>
+
+      <section class="sv-card" id="add-item-card">
+        <h2>3. Add Vault Item</h2>
+        <p>
+          Create a new vault item for an image, video, or document. Only someone with your voice passcode can add items.
+          The actual media stays off-chain (e.g. IPFS, S3); the contract stores a URI and metadata.
+        </p>
+        <form id="add-item-form">
+          <label>
+            Asset URI
+            <input type="text" id="item-uri" placeholder="ipfs://... or https://..." required />
+          </label>
+          <label>
+            Media type
+            <input type="text" id="item-media-type" placeholder="image/png, video/mp4" required />
+          </label>
+          <label>
+            Label
+            <input type="text" id="item-label" placeholder="e.g. Passport scan" required />
+          </label>
+          <label>
+            Voice phrase (for this action)
+            <input type="text" id="item-voice-phrase" required />
+          </label>
+          <button type="submit">Add to vault</button>
+        </form>
+        <pre id="add-item-preview" class="sv-code"></pre>
+      </section>
+
+      <section class="sv-card" id="manage-card">
+        <h2>4. Manage Existing Items</h2>
+        <form id="lookup-form">
+          <label>
+            Vault item ID
+            <input type="number" id="lookup-id" min="1" required />
+          </label>
+          <button type="submit">Lookup item (read-only)</button>
+        </form>
+        <pre id="lookup-result" class="sv-code"></pre>
+
+        <form id="revoke-form">
+          <h3>Revoke item</h3>
+          <label>
+            Vault item ID
+            <input type="number" id="revoke-id" min="1" required />
+          </label>
+          <label>
+            Voice phrase
+            <input type="text" id="revoke-voice-phrase" required />
+          </label>
+          <button type="submit">Revoke</button>
+        </form>
+
+        <form id="transfer-form">
+          <h3>Transfer item</h3>
+          <label>
+            Vault item ID
+            <input type="number" id="transfer-id" min="1" required />
+          </label>
+          <label>
+            Recipient principal
+            <input type="text" id="transfer-recipient" placeholder="ST..." required />
+          </label>
+          <label>
+            Voice phrase
+            <input type="text" id="transfer-voice-phrase" required />
+          </label>
+          <button type="submit">Transfer</button>
+        </form>
+
+        <pre id="manage-preview" class="sv-code"></pre>
+      </section>
+    </main>
+
+    <footer class="sv-footer">
+      <p>Saving Vault – Clarinet / Clarity demo. Replace the mock transaction builders in <code>ui/app.js</code> with real Stacks wallet integration when deploying.</p>
+    </footer>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
